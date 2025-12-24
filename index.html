@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BINANCE PREDICTORS | Institutional Grade Signals</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. CORE VARIABLES & THEME --- */
+        :root {
+            --bg-body: #050505;
+            --bg-card: #0f1115;
+            --bg-glass: rgba(15, 17, 21, 0.95);
+            --primary: #F0B90B; /* Binance Gold */
+            --accent: #00F0FF; /* Cyber Blue */
+            --success: #00C087;
+            --danger: #FF3B30;
+            --text-main: #FFFFFF;
+            --text-muted: #8E9BAE;
+            --gradient-gold: linear-gradient(135deg, #F0B90B 0%, #B88A00 100%);
+            --border-glass: 1px solid rgba(255, 255, 255, 0.08);
+            --shadow-glow: 0 0 20px rgba(240, 185, 11, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.03), transparent 70%);
+        }
+
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .section-py { padding: 100px 0; }
+        .text-gold { color: var(--primary); }
+        .text-blue { color: var(--accent); }
+        
+        .grid-3 { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(15px);
+            border-bottom: var(--border-glass); padding: 15px 0;
+        }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        
+        .logo { 
+            font-family: 'Space Grotesk'; font-size: 1.5rem; font-weight: 700; 
+            display: flex; align-items: center; gap: 10px; z-index: 1002;
+        }
+        .logo i { color: var(--primary); }
+        
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 30px; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .menu-toggle { display: none; font-size: 1.5rem; color: #fff; cursor: pointer; z-index: 1002; }
+
+        /* User Actions */
+        .user-actions { display: flex; align-items: center; gap: 20px; margin-left: 30px; z-index: 1002; }
+        
+        .cart-btn { position: relative; cursor: pointer; color: #fff; font-size: 1.3rem; transition: 0.3s; }
+        .cart-btn:hover { color: var(--primary); }
+        .cart-count {
+            position: absolute; top: -8px; right: -8px; background: var(--danger); color: white;
+            font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; display: none;
+        }
+
+        .login-btn {
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+            color: white; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 600; 
+            display: flex; align-items: center; gap: 10px; font-size: 0.9rem; transition: 0.3s;
+        }
+        .login-btn:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+
+        .user-profile { display: none; align-items: center; gap: 12px; cursor: pointer; }
+        .user-avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--primary); }
+
+        /* --- CART SIDEBAR --- */
+        .cart-sidebar {
+            position: fixed; top: 0; right: -100%; width: 400px; height: 100vh;
+            background: #111; border-left: 1px solid #333; z-index: 2000;
+            padding: 30px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column;
+        }
+        .cart-sidebar.active { right: 0; box-shadow: -20px 0 50px rgba(0,0,0,0.8); }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+        .cart-items { flex-grow: 1; overflow-y: auto; }
+        .cart-item {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .checkout-btn { width: 100%; background: var(--gradient-gold); border: none; padding: 15px; border-radius: 8px; font-weight: 800; cursor: pointer; color: #000; margin-top: 10px; font-size: 1rem; }
+
+        /* --- HERO --- */
+        .hero { padding-top: 160px; padding-bottom: 100px; text-align: center; }
+        .hero h1 { font-size: 4.5rem; line-height: 1.1; margin-bottom: 24px; font-weight: 900; letter-spacing: -1px; }
+        .hero h1 span { background: var(--gradient-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; }
+        
+        .btn-group { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn-primary { background: var(--primary); color: #000; padding: 16px 40px; border-radius: 8px; font-weight: 800; border: none; cursor: pointer; transition: 0.3s; }
+        .btn-secondary { background: transparent; color: #fff; padding: 16px 40px; border-radius: 8px; font-weight: 800; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; }
+        .btn-primary:hover { transform: translateY(-5px); box-shadow: 0 10px 40px rgba(240, 185, 11, 0.4); }
+
+        /* --- DASHBOARD --- */
+        .market-dashboard {
+            display: grid; grid-template-columns: 2.5fr 1fr; gap: 24px; margin-top: -60px; position: relative; z-index: 10;
+        }
+        .glass-panel { background: #0f1115; border: var(--border-glass); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+        .panel-header { background: rgba(255,255,255,0.03); padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        .panel-title { font-weight: 700; display: flex; align-items: center; gap: 10px; font-size: 1.1rem; }
+        
+        .coin-select { background: #000; color: var(--primary); border: 1px solid #333; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; outline: none; font-family: 'Outfit'; }
+        .chart-container { flex-grow: 1; min-height: 500px; position: relative; }
+        
+        .ai-content { padding: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: radial-gradient(circle at center, rgba(0, 240, 255, 0.05), transparent 70%); }
+        .gauge-circle { width: 160px; height: 160px; border-radius: 50%; border: 12px solid #1a1d24; position: relative; border-top: 12px solid var(--success); transform: rotate(-45deg); display:flex; align-items: center; justify-content: center; margin-bottom: 20px; transition: border-color 0.5s; }
+        .gauge-value { transform: rotate(45deg); font-size: 2.5rem; font-weight: 800; color: #fff; }
+
+        /* --- CREATIVE VIP PRICING --- */
+        #vip {
+            background: linear-gradient(180deg, transparent 0%, rgba(240, 185, 11, 0.03) 100%);
+        }
+        
+        /* FEATURED CARD STYLE */
+        .pricing-card.featured {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 60px rgba(240, 185, 11, 0.25);
+            z-index: 2; 
+            border-radius: 24px;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.3s;
+            max-width: 500px; /* Limit width since it's single */
+            width: 100%;
+        }
+        
+        .pricing-card.featured:hover { transform: translateY(-10px); box-shadow: 0 0 80px rgba(240, 185, 11, 0.4); }
+
+        .ribbon {
+            position: absolute; top: 25px; right: -28px;
+            background: var(--gradient-gold); color: #000;
+            padding: 5px 30px; font-weight: 800; font-size: 0.8rem;
+            transform: rotate(45deg); box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .plan-name { font-size: 1.4rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+        .plan-price { font-size: 4.5rem; font-weight: 800; color: #fff; margin-bottom: 30px; }
+        .plan-price span { font-size: 1.2rem; color: var(--text-muted); font-weight: 400; }
+        
+        .features-list { list-style: none; text-align: left; margin-bottom: 40px; flex-grow: 1; padding: 0 20px; }
+        .features-list li { margin-bottom: 20px; color: #ddd; font-size: 1.1rem; display: flex; align-items: center; gap: 15px; }
+        .features-list li i { color: var(--primary); font-size: 1.2rem; }
+
+        .btn-plan { width: 100%; padding: 20px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; border: none; font-size: 1.1rem; }
+        .btn-glow { background: var(--gradient-gold); color: #000; box-shadow: 0 10px 30px rgba(240, 185, 11, 0.2); }
+        .btn-glow:hover { box-shadow: 0 10px 50px rgba(240, 185, 11, 0.5); }
+
+        /* --- ADMINS & CALCULATOR --- */
+        .admin-card { background: #0f1115; border: var(--border-glass); border-radius: 20px; padding: 40px; text-align: center; transition: 0.3s; }
+        .admin-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .calc-box { background: #0f1115; border: var(--border-glass); border-radius: 20px; padding: 40px; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .input-field { width: 100%; background: #080808; border: 1px solid #333; color: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-family: 'Outfit'; }
+
+        /* --- TICKER --- */
+        .ticker-wrap { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #222; z-index: 999; height: 45px; display: flex; align-items: center; overflow: hidden; }
+        .ticker { display: flex; animation: ticker 40s linear infinite; white-space: nowrap; }
+        .ticker-item { padding: 0 30px; font-size: 0.9rem; color: #888; display:flex; gap:8px;}
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 3rem; }
+            .market-dashboard { grid-template-columns: 1fr; } 
+            .chart-container { min-height: 400px; }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+            .pricing-card.featured { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                position: fixed; top: 0; left: -100%; width: 75%; height: 100vh;
+                background: #000; flex-direction: column; align-items: flex-start;
+                padding: 100px 30px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1001; border-right: 1px solid #333;
+            }
+            .nav-links.active { left: 0; }
+            .nav-links a { margin: 15px 0; font-size: 1.3rem; }
+            .btn-nav { margin: 20px 0; }
+            .hero { padding-top: 120px; }
+            .hero h1 { font-size: 2.5rem; }
+            .btn-group { flex-direction: column; width: 100%; }
+            .btn-primary, .btn-secondary { width: 100%; }
+            .grid-3, .calc-grid { grid-template-columns: 1fr; }
+            .cart-sidebar { width: 100%; right: -100%; }
+            .admin-card { margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container nav-inner">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <div class="logo">
+                <i class="fa-solid fa-chart-line"></i> BINANCE PREDICTORS
+            </div>
+            <div class="nav-links" id="nav-links">
+                <a href="#market" onclick="toggleMenu()">Market</a>
+                <a href="#admins" onclick="toggleMenu()">Experts</a>
+                <a href="#calculator" onclick="toggleMenu()">Tools</a>
+                <a href="#vip" class="btn-nav" onclick="toggleMenu()"><i class="fa-solid fa-lock"></i> VIP</a>
+            </div>
+            <div class="user-actions">
+                <div class="cart-btn" onclick="toggleCart()">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+                <button id="login-btn" class="login-btn">
+                    <i class="fa-brands fa-google"></i> <span style="display:none; @media(min-width:768px){display:inline;}">Login</span>
+                </button>
+                <div id="user-profile" class="user-profile">
+                    <img id="user-avatar" src="" class="user-avatar" alt="User">
+                    <i class="fa-solid fa-right-from-bracket" onclick="handleLogout()" style="margin-left:5px; color:#666; cursor:pointer;" title="Logout"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <span style="cursor:pointer" onclick="toggleCart()"><i class="fa-solid fa-xmark fa-lg"></i></span>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div style="border-top:1px solid #333; padding-top:20px;">
+            <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold; margin-bottom:15px;">
+                <span>Total:</span> <span id="cart-total" class="text-gold">$0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">PROCEED TO PAYMENT</button>
+        </div>
+    </div>
+
+    <header class="hero container">
+        <span style="background:rgba(255,59,48,0.15); color:#ff3b30; padding:8px 20px; border-radius:30px; font-weight:700; font-size:0.85rem; display:inline-block; margin-bottom:20px; border:1px solid rgba(255,59,48,0.3);">
+            <i class="fa-solid fa-circle fa-2xs" style="margin-right:5px;"></i> SYSTEM ONLINE
+        </span>
+        <h1>UNFAIR MARKET<br><span>ADVANTAGE</span></h1>
+        <p> 24/7 expert guidance. Stop gambling, start trading.</p>
+        <div class="btn-group">
+            <button class="btn-primary" onclick="document.getElementById('vip').scrollIntoView()">JOIN VIP SQUAD</button>
+            <button class="btn-secondary" onclick="window.open('http://wa.link/f8e6it')"><i class="fa-brands fa-telegram"></i> FREE CHANNEL</button>
+        </div>
+    </header>
+
+    <section id="market" class="container">
+        <div class="market-dashboard">
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span style="height:10px; width:10px; background:#00C087; border-radius:50%; margin-right:10px; box-shadow:0 0 10px #00C087;"></span>
+                        <span id="chart-title">BTC/USDT</span>
+                    </div>
+                    <select id="coin-selector" class="coin-select" onchange="changeCoin()">
+                        <option value="BINANCE:BTCUSDT">BTC</option>
+                        <option value="BINANCE:ETHUSDT">ETH</option>
+                        <option value="BINANCE:BNBUSDT">BNB</option>
+                        <option value="BINANCE:SOLUSDT">SOL</option>
+                        <option value="BINANCE:XRPUSDT">XRP</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <div id="tradingview_chart" style="height: 100%; width: 100%;"></div>
+                </div>
+            </div>
+
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div class="panel-title"><i class="fa-solid fa-robot text-blue"></i> AI SCANNER</div>
+                </div>
+                <div class="ai-content">
+                    <div class="gauge-circle">
+                        <span class="gauge-value" id="aiPercent">84%</span>
+                    </div>
+                    <div class="ai-status" id="aiStatus">STRONG BUY</div>
+                    <p style="color:#666; font-size:0.85rem; margin-top:10px;">Analyzing 14 Indicators...</p>
+                    <button class="btn-secondary" style="margin-top:25px; width:100%; padding:12px; font-size:0.9rem;">VIEW FULL REPORT</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="admins" class="section-py container">
+        <h2 style="text-align:center; font-size:2.5rem; margin-bottom:50px; font-weight:800;">TOP <span class="text-gold">EXPERTS</span></h2>
+        <div class="grid-3" style="display:flex; justify-content:center;">
+            <div class="admin-card">
+                <img src="file (2).png" style="width:80px; border-radius:50%; margin-bottom:20px; border:3px solid var(--primary);" alt="Admin">
+                <h3>Kaveesh F.</h3>
+                <p class="text-blue" style="font-weight:bold; margin:5px 0;">Founder & Analyst</p>
+                <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; margin-top:15px;">
+                    <span style="color:#888; font-size:0.8rem;">CONTACT</span><br>
+                    <span style="font-weight:bold; color:#fff;">+94 77 688 3668</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="calculator" class="container" style="margin-bottom:80px;">
+        <div class="calc-box">
+            <h3 style="margin-bottom:30px; font-size:1.5rem;"><i class="fa-solid fa-calculator text-gold"></i> Live Profit Calculator</h3>
+            <div class="calc-grid">
+                <div>
+                    <input type="number" id="inv" class="input-field" placeholder="Investment ($)">
+                    <input type="number" id="lev" class="input-field" placeholder="Leverage (x)">
+                </div>
+                <div>
+                    <input type="number" id="entry" class="input-field" placeholder="Entry Price">
+                    <input type="number" id="exit" class="input-field" placeholder="Exit Price">
+                </div>
+            </div>
+            <button onclick="calculateProfit()" class="btn-primary" style="width:100%; margin-top:10px;">CALCULATE PNL</button>
+            <div id="result-box" style="margin-top:25px; display:none; background:rgba(240,185,11,0.1); padding:20px; border-radius:12px; border:1px solid var(--primary);">
+                <span style="color:#ccc; font-size:0.9rem; letter-spacing:1px;">ESTIMATED PROFIT</span>
+                <div id="pnl-val" style="font-size:2rem; font-weight:800; color:var(--success); margin-top:5px;">0.00 USDT</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="vip" class="section-py container">
+        <h2 style="text-align:center; font-size:3rem; margin-bottom:60px; font-weight:900; letter-spacing: -1px;">
+            VIP <span style="-webkit-text-stroke: 1px var(--primary); color:transparent;">ACCESS</span>
+        </h2>
+        
+        <div style="display:flex; justify-content:center; align-items:center;">
+            
+            <div class="pricing-card featured">
+                <div class="ribbon">MOST POPULAR</div>
+                <div class="plan-name" style="color:var(--primary);">Trader VIP</div>
+                <div class="plan-price" style="color:var(--primary);">$33<span>/mo</span></div>
+                <ul class="features-list">
+                    <li><i class="fa-solid fa-bolt"></i> 10-12 Signals Daily</li>
+                    <li><i class="fa-solid fa-globe"></i> Future</li>
+                    <li><i class="fa-solid fa-shield-halved"></i> Risk Management</li>
+                    <li><i class="fa-solid fa-headset"></i> Priority Support</li>
+                </ul>
+                <button class="btn-plan btn-glow" onclick="addToCart('Trader VIP Plan', 33)">ADD TO CART</button>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="ticker-wrap">
+        <div class="ticker" id="ticker-content"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaoR5TAdV5ZfAdbuCpzJ8GmyOdrXhvhrY",
+            authDomain: "lkaweesha.firebaseapp.com",
+            projectId: "lkaweesha",
+            storageBucket: "lkaweesha.firebasestorage.app",
+            messagingSenderId: "973163882066",
+            appId: "1:973163882066:web:07e64a89760c5c2037a18b",
+            measurementId: "G-H814TBXDT8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const loginBtn = document.getElementById('login-btn');
+        const userProfile = document.getElementById('user-profile');
+        const userAvatar = document.getElementById('user-avatar');
+
+        // Login Trigger Function (No Alert)
+        const triggerLogin = (callback) => {
+            signInWithPopup(auth, provider)
+            .then((result) => {
+                if(callback) callback();
+            }).catch((error) => console.error("Login Failed:", error));
+        };
+
+        loginBtn.addEventListener('click', () => triggerLogin());
+
+        window.handleLogout = () => signOut(auth);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginBtn.style.display = 'none';
+                userProfile.style.display = 'flex';
+                userAvatar.src = user.photoURL;
+            } else {
+                loginBtn.style.display = 'flex';
+                userProfile.style.display = 'none';
+            }
+        });
+
+        // Cart System
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        window.addToCart = (name, price) => {
+            if(!auth.currentUser) {
+                // Auto trigger login if not logged in
+                triggerLogin(() => addToCart(name, price));
+                return;
+            }
+            cart.push({ name, price, id: Date.now() });
+            saveCart(); renderCart(); toggleCart(true);
+        }
+
+        window.removeFromCart = (id) => {
+            cart = cart.filter(item => item.id !== id);
+            saveCart(); renderCart();
+        }
+
+        window.toggleCart = (forceOpen = false) => {
+            const sidebar = document.getElementById('cart-sidebar');
+            forceOpen ? sidebar.classList.add('active') : sidebar.classList.toggle('active');
+        }
+
+        window.checkout = () => {
+            if(!auth.currentUser) {
+                triggerLogin(() => checkout());
+                return;
+            }
+            if(cart.length === 0) return alert("Cart is empty");
+            alert("Redirecting to Payment Gateway...");
+        }
+
+        function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
+        function updateCartCount() {
+            const el = document.getElementById('cart-count');
+            el.innerText = cart.length;
+            el.style.display = cart.length > 0 ? 'block' : 'none';
+        }
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            if(cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#666; margin-top:20px;">Cart is empty.</p>';
+                totalEl.innerText = '$0.00';
+                return;
+            }
+            let html = '';
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price;
+                html += `<div class="cart-item">
+                    <div><div style="color:#fff; font-weight:600;">${item.name}</div><div style="color:var(--primary); font-size:0.9rem;">$${item.price}</div></div>
+                    <i class="fa-solid fa-trash" style="color:#ff3b30; cursor:pointer;" onclick="removeFromCart(${item.id})"></i>
+                </div>`;
+            });
+            container.innerHTML = html;
+            totalEl.innerText = '$' + total.toFixed(2);
+            updateCartCount();
+        }
+        renderCart();
+    </script>
+
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }
+
+        function changeCoin() {
+            const sel = document.getElementById('coin-selector');
+            const symbol = sel.value;
+            document.getElementById('chart-title').innerText = sel.options[sel.selectedIndex].text + '/USDT';
+            
+            new TradingView.widget({
+                "autosize": true, "symbol": symbol, "interval": "15", "timezone": "Etc/UTC", "theme": "dark", "style": "1", "locale": "en", "enable_publishing": false, "hide_top_toolbar": true, "hide_legend": false, "save_image": false, "backgroundColor": "rgba(15, 17, 21, 1)", "gridColor": "rgba(255, 255, 255, 0.05)", "container_id": "tradingview_chart"
+            });
+            
+            // Simulate AI update
+            document.getElementById('aiPercent').innerText = "Scanning...";
+            document.getElementById('aiStatus').innerText = "...";
+            setTimeout(() => {
+                const val = Math.floor(Math.random() * (95 - 75) + 75);
+                document.getElementById('aiPercent').innerText = val + "%";
+                document.getElementById('aiStatus').innerText = val > 85 ? "STRONG BUY" : "BUY";
+            }, 1000);
+        }
+        window.onload = function() { changeCoin(); startTicker(); }
+
+        function calculateProfit() {
+            const inv = parseFloat(document.getElementById('inv').value);
+            const lev = parseFloat(document.getElementById('lev').value);
+            const entry = parseFloat(document.getElementById('entry').value);
+            const exit = parseFloat(document.getElementById('exit').value);
+            if(inv && lev && entry && exit) {
+                const p = ((exit - entry) / entry) * lev * inv;
+                const el = document.getElementById('pnl-val');
+                document.getElementById('result-box').style.display='block';
+                el.innerText = p.toFixed(2) + ' USDT';
+                el.style.color = p >= 0 ? '#00C087' : '#FF3B30';
+            }
+        }
+
+        function startTicker() {
+            const c = [{s:'BTC', p:'$96,400', c:'+1.2%'}, {s:'ETH', p:'$2,800', c:'-0.5%'}, {s:'SOL', p:'$145', c:'+3.1%'}, {s:'BNB', p:'$610', c:'+0.8%'}];
+            const t = document.getElementById('ticker-content');
+            let html = ''; 
+            // Loop multiple times to fill width
+            for(let i=0; i<6; i++) {
+                c.forEach(x => {
+                    let col = x.c.includes('+') ? '#00C087' : '#FF3B30';
+                    html += `<div class="ticker-item"><span style="color:#fff; font-weight:bold;">${x.s}</span> <span style="color:#ccc">${x.p}</span> <span style="color:${col}">${x.c}</span></div>`;
+                });
+            }
+            t.innerHTML = html;
+        }
+
+        // AI Loop
+        setInterval(() => {
+            const current = document.getElementById('aiPercent').innerText;
+            if(current === "Scanning...") return;
+            const num = parseInt(current);
+            const flux = Math.floor(Math.random() * 3) - 1; 
+            document.getElementById('aiPercent').innerText = (num + flux) + "%";
+        }, 3000);
+    </script>
+</body>
+</html>
