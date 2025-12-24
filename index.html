@@ -60,6 +60,7 @@
         }
         .logo i { color: var(--primary); }
         
+        /* Menu */
         .nav-links { display: flex; align-items: center; }
         .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 30px; font-weight: 500; transition: 0.3s; }
         .nav-links a:hover { color: var(--primary); }
@@ -261,10 +262,10 @@
             <i class="fa-solid fa-circle fa-2xs" style="margin-right:5px;"></i> SYSTEM ONLINE
         </span>
         <h1>UNFAIR MARKET<br><span>ADVANTAGE</span></h1>
-        <p> 24/7 expert guidance. Stop gambling, start trading.</p>
+        <p>Institutional grade signals, AI-driven sentiment analysis, and 24/7 expert guidance. Stop gambling, start trading.</p>
         <div class="btn-group">
             <button class="btn-primary" onclick="document.getElementById('vip').scrollIntoView()">JOIN VIP SQUAD</button>
-            <button class="btn-secondary" onclick="window.open('http://wa.link/f8e6it')"><i class="fa-brands fa-telegram"></i> FREE CHANNEL</button>
+            <button class="btn-secondary" onclick="window.open('https://t.me/binance', '_blank')"><i class="fa-brands fa-telegram"></i> FREE CHANNEL</button>
         </div>
     </header>
 
@@ -309,7 +310,7 @@
         <h2 style="text-align:center; font-size:2.5rem; margin-bottom:50px; font-weight:800;">TOP <span class="text-gold">EXPERTS</span></h2>
         <div class="grid-3" style="display:flex; justify-content:center;">
             <div class="admin-card">
-                <img src="file (2).png" style="width:80px; border-radius:50%; margin-bottom:20px; border:3px solid var(--primary);" alt="Admin">
+                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" style="width:80px; border-radius:50%; margin-bottom:20px; border:3px solid var(--primary);" alt="Admin">
                 <h3>Kaveesh F.</h3>
                 <p class="text-blue" style="font-weight:bold; margin:5px 0;">Founder & Analyst</p>
                 <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; margin-top:15px;">
@@ -353,8 +354,8 @@
                 <div class="plan-name" style="color:var(--primary);">Trader VIP</div>
                 <div class="plan-price" style="color:var(--primary);">$33<span>/mo</span></div>
                 <ul class="features-list">
-                    <li><i class="fa-solid fa-bolt"></i> 10-12 Signals Daily</li>
-                    <li><i class="fa-solid fa-globe"></i> Future</li>
+                    <li><i class="fa-solid fa-bolt"></i> 5-8 Signals Daily</li>
+                    <li><i class="fa-solid fa-globe"></i> Future & Spot</li>
                     <li><i class="fa-solid fa-shield-halved"></i> Risk Management</li>
                     <li><i class="fa-solid fa-headset"></i> Priority Support</li>
                 </ul>
@@ -437,12 +438,39 @@
         }
 
         window.checkout = () => {
+            // 1. Check Login
             if(!auth.currentUser) {
                 triggerLogin(() => checkout());
                 return;
             }
+            // 2. Check Cart
             if(cart.length === 0) return alert("Cart is empty");
-            alert("Redirecting to Payment Gateway...");
+
+            // 3. Calculate Total
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            // 4. Format Message
+            let message = `*NEW VIP ORDER REQUEST* 🚀%0A`;
+            message += `---------------------------%0A`;
+            message += `👤 *Client:* ${auth.currentUser.displayName}%0A`;
+            message += `📧 *Email:* ${auth.currentUser.email}%0A`;
+            message += `---------------------------%0A`;
+            message += `*🛒 ORDER DETAILS:*%0A`;
+
+            cart.forEach((item, index) => {
+                message += `${index + 1}. ${item.name} - $${item.price}%0A`;
+            });
+
+            message += `---------------------------%0A`;
+            message += `💰 *TOTAL AMOUNT: $${total}*%0A`;
+            message += `---------------------------%0A`;
+            message += `Hi, I would like to pay for this subscription. Please send me the payment details.`;
+
+            // 5. Open WhatsApp
+            const phoneNumber = "94776883668";
+            const url = `https://wa.me/${phoneNumber}?text=${message}`;
+
+            window.open(url, '_blank');
         }
 
         function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); }
